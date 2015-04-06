@@ -91,13 +91,49 @@ int		graph_ins_vertex(Graph *graph, const void *data)
 
 int		graph_ins_edge(Graph *graph, const void *data1, const void *data2)
 {
+	ListElmt	*element;
+	int			retval;
 
+	/* Don't allow insertion of an edge without both its vertices in the graph. */
+	for (element = list_head(&graph->adjusts); element != NULL;
+			element = list_next(element))
+	{
+		if (graph->match(data2, ((AdjList *)list_data(element))->vertex))
+			break;
+	}
+	if (element == NULL)
+		return -1;
+	
+	for (element = list_head(&graph->adjlists); element != NULL;
+			element = list_next(element))
+	{
+		if (graph->match(data1, ((AdjList *)list_data(element))->vertex))
+			break;
+	}
+
+	if (element == NULL)
+		return -1;
+
+	/* Insert the second vertex into the adjacency list of the first vertex. */
+	if ((retval = set_insert(&((AdjList *)list_data(element))0>adjacent, data2)) != 0)
+		return retval;
+	
+	/* Adjust the edge count to account for the inserted edge. */
+	graph->ecount++;
+	return 0;
 }
 
-int		graph_rem_vertex(Graph *graph, void **data);
+int		graph_rem_vertex(Graph *graph, void **data)
+{
+	
+}
 int		graph_rem_edge(Graph *graph, void *data1, void **data2);
 
 int		graph_adjlist(const Graph *graph, const void *data, AdjList **adjlist);
-int		graph_is_adjacent(const Graph *graph, const void *data1, const void *data2);
+int		graph_is_adjacent(const Graph *graph, const void *data1, const void *data2)
+{
+	
+
+}
 
 
